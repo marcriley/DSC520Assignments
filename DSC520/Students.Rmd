@@ -1,0 +1,84 @@
+---
+title: "Week7"
+author: "Marc Riley"
+date: "5/2/2021"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+  '': default
+---
+
+```{r echo=FALSE}
+stewd("C:\Users\Daffy\OneDrive\Documents")
+survey_df <- read.csv("student-survey.csv")
+head(survey_df)
+```
+#Use R to calculate the covariance of the Survey variables and provide an explanation of why you would use this calculation and what the results indicate.
+
+```{r echo=FALSE}
+cov(survey_df$TimeTV,survey_df$Happiness)
+cov(survey_df$TimeTV,survey_df$TimeReading)
+cov(survey_df$TimeReading,survey_df$Happiness)
+cov(survey_df$TimeReading,survey_df$Gender)
+cov(survey_df$TimeTV,survey_df$Gender)
+
+```
+## TV Time leads to more happiness 
+## More TV time leads to less time reading 
+## More Time reading leads to less happiness
+## Gender and TimeReading is close to 0 suggesting no correlation 
+## Gender and TimeTV is close to 0 suggesting no correlation 
+
+#Examine the Survey data variables. What measurement is being used for the variables? Explain what effect changing the measurement being used for the variables would have on the covariance calculation. Would this be a problem? Explain and provide a better alternative if needed
+
+## Time is found in hours, TimeTV in minutes, Gender is in Binary, and Happiness is a percentage. Some small changes that i would make include excluding gender (it does not seem to be necessary), and changing TimeTV to hours rather than minuts to be the same as reading
+
+#Choose the type of correlation test to perform, explain why you chose this test, and make a prediction if the test yields a positive or negative correlation?
+
+```{r echo=FALSE}
+cov(survey_df$TimeTV,survey_df$Happiness)
+
+```
+##TVTime has a positive correlation to Happiness, meaning the more time spent watching TV the happier someone is
+
+#Perform a correlation analysis of:
+#All variables
+#A single correlation between two a pair of the variables
+#Repeat your correlation test in step 2 but set the confidence interval at 99%
+#Describe what the calculations in the correlation matrix suggest about the relationship between the variables. Be specific with your explanation.
+
+A single correlation between two a pair of the variables
+```{r echo=FALSE}
+cov(survey_df$TimeTV,survey_df$TimeReading)
+
+```
+Repeat your correlation test in step 2 but set the confidence interval at 99%
+```{r echo=FALSE}
+cor.test(survey_df$TimeTV,survey_df$TimeReading, conf.level=.99)
+
+```
+#Describe what the calculations in the correlation matrix suggest about the relationship between the variables. Be specific with your explanation.
+## TV Time leads to more happiness 
+## More TV time leads to less time reading 
+## More Time reading leads to less happiness
+## Gender and TimeReading is close to 0 suggesting no correlation 
+## Gender and TimeTV is close to 0 suggesting no correlation 
+
+#Calculate the correlation coefficient and the coefficient of determination, describe what you conclude about the results.
+```{r echo=FALSE}
+survey_coefficient <- survey_df[, c("TimeReading", "TimeTV", "Happiness","Gender")]
+cor(survey_coefficient)
+```
+## Time Reading has a negative affect on TV time and Happiness 
+## TVTime has a positive affect on Happiness
+## Gender does not seem to matter
+#Based on your analysis can you say that watching more TV caused students to read less? Explain.
+##Yes The correlation between TVTime and Timereading was -.88 which suggest a strong negative correlation between these two variables 
+
+#Pick three variables and perform a partial correlation, documenting which variable you are “controlling”. Explain how this changes your interpretation and explanation of the results.
+```{r echo=FALSE}
+library(ggm)
+correlation <- pcor(c("TimeReading", "TimeTV", "Happiness"), var(survey_df))
+correlation^2
+```
